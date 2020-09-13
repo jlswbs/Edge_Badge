@@ -97,7 +97,7 @@ void loop() {
     int ax = (WIDTH/2) + (x/6);
     int ay = (HEIGHT/2) + (y/6);
       
-    if (ax>0 && ax<WIDTH && ay>0 && ay <HEIGHT) framebuffer[ax+ay*ARCADA_TFT_WIDTH] = coll;//color565(coll<<1, coll<<2, coll<<3);;
+    if (ax>0 && ax<WIDTH && ay>0 && ay <HEIGHT) framebuffer[ax+ay*ARCADA_TFT_WIDTH] = coll;
 
   }
   
