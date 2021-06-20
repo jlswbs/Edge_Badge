@@ -42,10 +42,10 @@ void rndrule() {
   h = trngGetRandomNumber()%RND;
   i = trngGetRandomNumber()%RND;
 
-  for(int i = 0; i < WIDTH; i++){
+  for(int x = 0; x < WIDTH; x++){
   
-    parent[i] = trngGetRandomNumber()%3;
-    child[i] = 0;
+    parent[x] = trngGetRandomNumber()%3;
+    child[x] = 0;
 
   }
 
@@ -55,10 +55,10 @@ void rndseed(){
 
   memset(framebuffer, 0, 2*SCR);
 
-  for(int i = 0; i < WIDTH; i++){
+  for(int x = 0; x < WIDTH; x++){
   
-    parent[i] = trngGetRandomNumber()%3;
-    child[i] = 0;
+    parent[x] = trngGetRandomNumber()%3;
+    child[x] = 0;
     
   }
 
