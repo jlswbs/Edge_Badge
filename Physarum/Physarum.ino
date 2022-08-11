@@ -20,16 +20,19 @@ uint16_t *framebuffer;
 #define SCR (WIDTH * HEIGHT)
 
 #define ITER  5000
+#define NUM   8
 
-  uint16_t coll;
-  uint16_t grid[WIDTH][HEIGHT]; 
-  int state[8];
+  uint16_t coll[NUM];
+  uint16_t grid[WIDTH][HEIGHT];
+  uint16_t image;
   int t, q;
 
 
 void rndseed(){
 
   memset(framebuffer, 0, 2*SCR);
+
+  for (int i = 0; i < NUM; i++) coll[i] = rand();
 
   for (int y = 0; y < HEIGHT; y++){  
     for (int x = 0; x < WIDTH; x++){
@@ -40,7 +43,7 @@ void rndseed(){
     }
   }
   
-  for (int i = 1; i < 8; i++){
+  for (int i = 1; i < NUM; i++){
     
     int x = 2 * (5 + trngGetRandomNumber()%(WIDTH/2)-5);
     int y = 2 * (5 + trngGetRandomNumber()%(HEIGHT/2)-5);
@@ -64,7 +67,7 @@ void nextstep(){
       
       if(p < 30){
         
-        t = 1 + rand()%5;
+        t = 1 + trngGetRandomNumber()%5;
         if(t == 1 && grid[x+2][y] == 0){ grid[x+2][y] = q*100; grid[x+1][y] = q*100; } 
         if(t == 2 && grid[x][y+2] == 0){ grid[x][y+2] = q*100; grid[x][y+1] = q*100; } 
         if(t == 3 && grid[x-2][y] == 0){ grid[x-2][y] = q*100; grid[x-1][y] = q*100; } 
@@ -91,10 +94,10 @@ void nextstep(){
     if(grid[x][y] >= 1000 && grid[x][y] < 2000){
       
       q = (grid[x][y]/100)-10;
-      if(state[q] == 0 && grid[x+2][y] == 0){ grid[x+2][y] = q*100; grid[x+1][y] = q*100; }
-      if(state[q] == 0 && grid[x][y+2] == 0){ grid[x][y+2] = q*100; grid[x][y+1] = q*100; }
-      if(state[q] == 0 && grid[x-2][y] == 0){ grid[x-2][y] = q*100; grid[x-1][y] = q*100; }
-      if(state[q] == 0 && grid[x][y-2] == 0){ grid[x][y-2] = q*100; grid[x][y-1] = q*100; }
+      if(grid[x+2][y] == 0){ grid[x+2][y] = q*100; grid[x+1][y] = q*100; }
+      if(grid[x][y+2] == 0){ grid[x][y+2] = q*100; grid[x][y+1] = q*100; }
+      if(grid[x-2][y] == 0){ grid[x-2][y] = q*100; grid[x-1][y] = q*100; }
+      if(grid[x][y-2] == 0){ grid[x][y-2] = q*100; grid[x][y-1] = q*100; }
     
     }
     
@@ -150,30 +153,19 @@ void loop() {
 
   nextstep();
 
-  memset(framebuffer, 0, 2*SCR);
-
-
   for (int y = 0; y < HEIGHT; y++){  
     for (int x = 0; x < WIDTH; x++){
     
-      if(grid[x][y] == 1) coll = BLACK;
       if(grid[x][y] >= 100 && grid[x][y] < 1000){
-        
-        q = grid[x][y]/100;
-        if(q == 1) coll = BLUE;
-        if(q == 2) coll = YELLOW;
-        if(q == 3) coll = RED;
-        if(q == 4) coll = MAGENTA;
-        if(q == 5) coll = GREEN;
-        if(q == 6) coll = CYAN;
-        if(q == 7) coll = WHITE;
+        q = (grid[x][y]/100)%NUM;
+        image = coll[q];    
+      } else image = BLACK;
       
-        framebuffer[x+ARCADA_TFT_WIDTH*y] = coll;
+      framebuffer[x+ARCADA_TFT_WIDTH*y] = image;
       
-      }
     }
-  }                                             
-
+  }
+    
   arcada.blitFrameBuffer(0, 0, true, false);
  
 }
