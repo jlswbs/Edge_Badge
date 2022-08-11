@@ -32,7 +32,7 @@ void rndseed(){
 
   memset(framebuffer, 0, 2*SCR);
 
-  for (int i = 0; i < NUM; i++) coll[i] = rand();
+  for (int i = 0; i < NUM; i++) coll[i] = trngGetRandomNumber();
 
   for (int y = 0; y < HEIGHT; y++){  
     for (int x = 0; x < WIDTH; x++){
